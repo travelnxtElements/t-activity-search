@@ -3,8 +3,8 @@
 <link rel="import" href="../t-notify/t-notify.html">
 <link rel="import" href="../t-shared-lib/t-search-page-behaviour.html">
 
-<link rel="import" href="t-air-search.html">
-<link rel="import" href="t-air-search-api.html">
+<link rel="import" href="t-activity-search.html">
+<link rel="import" href="t-activity-search-api.html">
 
 <!--
     <h3>Details:</h3>
@@ -25,11 +25,11 @@
             var request = {
                 "productType": "car",
                 "pickupLocation": {
-                    "name": "McCarran International Airport",
+                    "name": "McCarran International activityport",
                     "geoCode": "36.0854,-115.15",
-                    "type": "Airport",
+                    "type": "activityport",
                     "code": "LAS",
-                    "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                    "formattedAddress": "Las Vegas, NV, United States - McCarran International activityport (LAS)"
                 },
                 "pickupDate": {
                     "date": "06/23/2016",
@@ -40,11 +40,11 @@
                     "time": "12 AM"
                 },
                 "dropoffLocation": {
-                    "name": "McCarran International Airport",
+                    "name": "McCarran International activityport",
                     "geoCode": "36.0854,-115.15",
-                    "type": "Airport",
+                    "type": "activityport",
                     "code": "LAS",
-                    "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                    "formattedAddress": "Las Vegas, NV, United States - McCarran International activityport (LAS)"
                 }
             };
 
@@ -67,18 +67,18 @@
 
     <h3>Example:</h3>
 
-        <t-air-search-page
+        <t-activity-search-page
             id="searchPage"
             api-base-url="http://qa-mystiquecode.tavisca.com/"
             auth-token="{{tokenResponse.authenticationToken}}"
             api-url-format="/api/Session/SESSIONKEY">
-        </t-air-search-page>
+        </t-activity-search-page>
 
     @demo demo/index.html
 -->
 
 
-<dom-module id="t-air-search-page">
+<dom-module id="t-activity-search-page">
     <template>
         <style>
             :host {
@@ -88,22 +88,22 @@
 
         <t-notify id="notify" message="" type="error"></t-notify>
         
-        <t-air-search 
+        <t-activity-search 
             id="searchView"
             autosuggest-api="{{apiBaseUrl}}api/content/autosuggest/"
             auth-token="{{authToken}}"
-            on-t-air-search="onSearch">
-        </t-air-search>
+            on-t-activity-search="onSearch">
+        </t-activity-search>
 
-        <t-air-search-api 
+        <t-activity-search-api 
             id="searchApi" 
             loading={{loading}} 
             api-base-url="{{apiBaseUrl}}" 
             api-relative-url="api/Flight/search" 
             auth-token="{{authToken}}"
-            on-t-air-search-api-success="onSearchSuccess"
-            on-t-air-search-api-error="onSearchError">
-        </t-air-search-api>
+            on-t-activity-search-api-success="onSearchSuccess"
+            on-t-activity-search-api-error="onSearchError">
+        </t-activity-search-api>
 
         <t-sessionstorage
             id="sessionStore"
@@ -116,7 +116,7 @@
     <script>
         (function () {
             Polymer({
-                is: 't-air-search-page',
+                is: 't-activity-search-page',
                 
                 
                 properties: {

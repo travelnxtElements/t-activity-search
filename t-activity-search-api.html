@@ -4,13 +4,13 @@
 <!--
     <h3>Details:</h3>
 
-        `t-air-search-api` is a air search api component integrated with mystique apis.
+        `t-activity-search-api` is a activity search api component integrated with mystique apis.
 
         It fires mystique search call and returns `searchId` upon successful opearion
 
     <h3>Object Structure:</h3>
 
-        1. This component uses following request format to search airs -
+        1. This component uses following request format to search activitys -
 
             var request = {
                 productType": "Flight",
@@ -38,10 +38,10 @@
                 ],
                 "legs": [
                     {
-                        "departureLocation": data.DepartureAirport,
-                        "includeNearByAirportsForDeparture": true,
-                        "arrivalLocation": data.ArrivalAirport,
-                        "includeNearByAirportsForArrival": true,
+                        "departureLocation": data.Departureactivityport,
+                        "includeNearByactivityportsForDeparture": true,
+                        "arrivalLocation": data.Arrivalactivityport,
+                        "includeNearByactivityportsForArrival": true,
                         "travelDate": {
                             "date":  this._getFormattedDate(data.departureDate)
                         }
@@ -51,10 +51,10 @@
             };
             if (data.itineraryType === 'RoundTrip') {
                 request.legs[1] = {
-                    "departureLocation": data.ArrivalAirport,
-                    "includeNearByAirportsForDeparture": true,
-                    "arrivalLocation": data.DepartureAirport,
-                    "includeNearByAirportsForArrival": true,
+                    "departureLocation": data.Arrivalactivityport,
+                    "includeNearByactivityportsForDeparture": true,
+                    "arrivalLocation": data.Departureactivityport,
+                    "includeNearByactivityportsForArrival": true,
                     "travelDate": {
                         "date":  this._getFormattedDate(data.arrivalDate)
                     }
@@ -66,24 +66,24 @@
 
         following events are fired by this component
 
-            1. 't-air-search-api-success' - fired upon successful search call
-            2. 't-air-search-api-error' - fired if search call is failed
+            1. 't-activity-search-api-success' - fired upon successful search call
+            2. 't-activity-search-api-error' - fired if search call is failed
 
     <h3>Example:</h3>
 
-        <t-air-search-api 
+        <t-activity-search-api 
             id="searchApi" 
             loading={{loading}} 
             api-base-url="{{apiBaseUrl}}" 
-            api-relative-url="api/air/search" 
+            api-relative-url="api/activity/search" 
             auth-token="{{authToken}}"
-            on-t-air-search-api-success="onSearchSuccess"
-            on-t-air-search-api-error="onSearchError">
-        </t-air-search-api>
+            on-t-activity-search-api-success="onSearchSuccess"
+            on-t-activity-search-api-error="onSearchError">
+        </t-activity-search-api>
 
     @demo demo/index.html
 -->
-<dom-module id="t-air-search-api">
+<dom-module id="t-activity-search-api">
     <template>
         <iron-ajax id="ajaxCall" method="POST" content-type="application/json" handle-as="json" verbose>
         </iron-ajax>
@@ -93,7 +93,7 @@
 (function() {
 
     Polymer({
-        is: 't-air-search-api',
+        is: 't-activity-search-api',
 
         /*
          * <p>Behaviour to validate ajax parameters and handle error codes.</p>
@@ -106,7 +106,7 @@
         },
 
         /*
-         * <p>Method to search airs</p>
+         * <p>Method to search activitys</p>
          */
         search: function(data) {
 

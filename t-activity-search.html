@@ -15,7 +15,7 @@ __User input__: Properties like `Location`, `travel Dates` etc. reflect the user
 necessary for searching
 
 -->
-<dom-module id='t-air-search'>
+<dom-module id='t-activity-search'>
     <template>
         <style include="iron-flex">
         :host {
@@ -52,13 +52,13 @@ necessary for searching
                     <t-calendar class="flex" id="startDate" required selected-date="{{startDate}}" label="From Date" name="startDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
                     <t-calendar class="flex" id="endDate" required selected-date="{{endDate}}" label="To Date" name="endDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
                 </div>
-                <t-button id="search" class="primary row" on-click="searchFlight" type="button" label="Search Cars" /></t-button>
+                <t-button id="search" class="primary row" on-click="searchActivity" type="button" label="Search Cars" /></t-button>
             </div>
     </template>
 </dom-module>
 <script>
 Polymer({
-    is: 't-air-search',
+    is: 't-activity-search',
     properties: {
 
         /**
@@ -102,22 +102,6 @@ Polymer({
             value: ''
         },
 
-        /**
-         * The query parameter for autosuggest to work. This is token to pass with the request for * autosuggest.
-         */
-        authToken: {
-            type: String,
-            value: ""
-        },
-
-        /**
-         * The type of cabin, example values are _Economy_ and _Business_
-         */
-        cabinType: {
-            type: String,
-            value: "Economy"
-        },
-
          /**
          * Pass the minimum date difference to start booking from
          *///
@@ -133,7 +117,7 @@ Polymer({
             // access sibling or parent elements here
             var startDate = new Date();
             startDate.setDate(startDate.getDate() + this.bookDateDifference);
-            this.$.departureDate.picker.set('min', startDate);
+            this.$.startDate.picker.set('min', startDate);
         });
         this.addEventListener('on-form-submit', function(event) {
             component.search(event.detail);
@@ -157,7 +141,6 @@ Polymer({
      * <p>Builds search request</p>
     */
     _buildSearchRequest: function() {
-
         return {
             location: this.location,
             startDate: this.startDate,
@@ -168,14 +151,14 @@ Polymer({
     /**
      * The method to fire the search function
      */
-    searchFlight: function(searchParams) {
+    searchActivity: function(searchParams) {
         if (!this.validate()) {
             return;
         }
 
         var request = this._buildSearchRequest();
 
-        this.fire('t-air-search', request);
+        this.fire('t-activity-search', request);
     },
 
     /*
