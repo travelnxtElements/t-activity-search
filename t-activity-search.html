@@ -1,0 +1,195 @@
+<link rel='import' href='../polymer/polymer.html'>
+<link rel="import" href="../t-button/t-button.html" />
+<link rel="import" href="../t-autosuggest/t-autosuggest.html" />
+<link rel="import" href="../t-calendar/t-calendar.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<!--
+This component is a form that allows a user to search for Activity.
+It exposes certain prperties which allow control over different aspects
+of searching.
+
+There are fundamentally three types of properties that form the public
+api of this component.
+
+__User input__: Properties like `Location`, `travel Dates` etc. reflect the user input
+necessary for searching
+
+-->
+<dom-module id='t-air-search'>
+    <template>
+        <style include="iron-flex">
+        :host {
+            font-family: var(--primary-font-family);
+            display: block;
+            padding: var(--form-spacing,10px);
+        }
+        
+        t-autosuggest,
+        t-calendar{
+            outline: 0;
+        }
+
+        #departureDate{
+            margin-right: var(--form-spacing,10px);
+        }
+        .row {
+            margin: 20px 0;
+            display: block;
+        }
+        .row:first-child{
+            margin: 0 0 20px 0;
+            display: block;
+        }
+        #search {
+            margin-top: 10px;
+        }
+        </style>
+            <div class="form flex">
+                <div class="row">
+                    <t-autosuggest id="location" name="location" required selected-item="{{location}}" query-params="token={{authToken}}" label="Origin" token-param="formattedAddress" data-url="{{autosuggestApi}}" error-message="You missed this."></t-autosuggest>
+                </div>
+                <div class="row layout horizontal">
+                    <t-calendar class="flex" id="startDate" required selected-date="{{startDate}}" label="From Date" name="startDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
+                    <t-calendar class="flex" id="endDate" required selected-date="{{endDate}}" label="To Date" name="endDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
+                </div>
+                <t-button id="search" class="primary row" on-click="searchFlight" type="button" label="Search Cars" /></t-button>
+            </div>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: 't-air-search',
+    properties: {
+
+        /**
+         * The location to search from.
+         * Must be a value picked from suggested locations?.
+         */
+        location: Object,
+
+        /**
+         * The date of departure.
+         */
+        startDate: {
+            type: String,
+            value: '',
+            notify: true,
+            observer: '_travelDateChanged'
+        },
+
+        /**
+         * The date of returning back to the departure location
+         * __if__ the type of trip is _Round Trip_
+         */
+        endDate: {
+            type: String,
+            value: '',
+            notify: true
+        },
+
+       
+        /**
+         * The api url that returns suggestions (auto suggest) shown in
+         * departure and arrival airport fields
+         */
+        autosuggestApi: String,
+
+        /**
+         * The error message that will be shown to the user
+         */
+        error: {
+            type: String,
+            value: ''
+        },
+
+        /**
+         * The query parameter for autosuggest to work. This is token to pass with the request for * autosuggest.
+         */
+        authToken: {
+            type: String,
+            value: ""
+        },
+
+        /**
+         * The type of cabin, example values are _Economy_ and _Business_
+         */
+        cabinType: {
+            type: String,
+            value: "Economy"
+        },
+
+         /**
+         * Pass the minimum date difference to start booking from
+         *///
+        bookDateDifference: {
+            type: Number,
+            value: 3
+        }
+    },
+
+    attached: function() {
+        var component = this;
+        this.async(function() {
+            // access sibling or parent elements here
+            var startDate = new Date();
+            startDate.setDate(startDate.getDate() + this.bookDateDifference);
+            this.$.departureDate.picker.set('min', startDate);
+        });
+        this.addEventListener('on-form-submit', function(event) {
+            component.search(event.detail);
+        });
+    },
+
+    _travelDateChanged: function() {
+        if (this.itineraryType !== undefined) {
+            if (this.itineraryType === 'RoundTrip') {
+                if (this.departureDate != '') {
+                    this.$.arrivalDate.picker.set('min', new Date(this.departureDate));
+                    if(this.departureDate > this.arrivalDate){
+                        this.arrivalDate = null;
+                    }
+                }
+            } 
+        }
+    },
+
+    /*
+     * <p>Builds search request</p>
+    */
+    _buildSearchRequest: function() {
+
+        return {
+            location: this.location,
+            startDate: this.startDate,
+            endDate: this.endDate
+        };
+    },
+
+    /**
+     * The method to fire the search function
+     */
+    searchFlight: function(searchParams) {
+        if (!this.validate()) {
+            return;
+        }
+
+        var request = this._buildSearchRequest();
+
+        this.fire('t-air-search', request);
+    },
+
+    /*
+     * <p>validation function</p>
+    */
+    validate: function() {
+        var check = true;
+        var requiredFields = this.querySelectorAll('[required]');
+        for (var i = 0; i < requiredFields.length; i++) {
+            if (!requiredFields[i].validate()) {
+                check = false;
+            }
+        }
+        return check;
+    }
+});
+</script>
