@@ -29,7 +29,7 @@ necessary for searching
             outline: 0;
         }
 
-        #departureDate{
+        #fromDate{
             margin-right: var(--form-spacing,10px);
         }
         .row {
@@ -49,10 +49,10 @@ necessary for searching
                     <t-autosuggest id="location" name="location" required selected-item="{{location}}" query-params="token={{authToken}}" label="Origin" token-param="formattedAddress" data-url="{{autosuggestApi}}" error-message="You missed this."></t-autosuggest>
                 </div>
                 <div class="row layout horizontal">
-                    <t-calendar class="flex" id="startDate" required selected-date="{{startDate}}" label="From Date" name="startDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
-                    <t-calendar class="flex" id="endDate" required selected-date="{{endDate}}" label="To Date" name="endDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
+                    <t-calendar class="flex" id="fromDate" required selected-date="{{fromDate}}" label="From Date" name="fromDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
+                    <t-calendar class="flex" id="toDate" required selected-date="{{toDate}}" label="To Date" name="toDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
                 </div>
-                <t-button id="search" class="primary row" on-click="searchActivity" type="button" label="Search Cars" /></t-button>
+                <t-button id="search" class="primary row" on-click="searchActivity" type="button" label="Search Activities" /></t-button>
             </div>
     </template>
 </dom-module>
@@ -70,7 +70,7 @@ Polymer({
         /**
          * The date of departure.
          */
-        startDate: {
+        fromDate: {
             type: String,
             value: '',
             notify: true,
@@ -81,7 +81,7 @@ Polymer({
          * The date of returning back to the departure location
          * __if__ the type of trip is _Round Trip_
          */
-        endDate: {
+        toDate: {
             type: String,
             value: '',
             notify: true
@@ -115,9 +115,9 @@ Polymer({
         var component = this;
         this.async(function() {
             // access sibling or parent elements here
-            var startDate = new Date();
-            startDate.setDate(startDate.getDate() + this.bookDateDifference);
-            this.$.startDate.picker.set('min', startDate);
+            var fromDate = new Date();
+            fromDate.setDate(fromDate.getDate() + this.bookDateDifference);
+            this.$.fromDate.picker.set('min', fromDate);
         });
         this.addEventListener('on-form-submit', function(event) {
             component.search(event.detail);
@@ -125,15 +125,11 @@ Polymer({
     },
 
     _travelDateChanged: function() {
-        if (this.itineraryType !== undefined) {
-            if (this.itineraryType === 'RoundTrip') {
-                if (this.departureDate != '') {
-                    this.$.arrivalDate.picker.set('min', new Date(this.departureDate));
-                    if(this.departureDate > this.arrivalDate){
-                        this.arrivalDate = null;
-                    }
-                }
-            } 
+        if (this.fromDate != '') {
+            this.$.toDate.picker.set('min', new Date(this.fromDate));
+            if (this.fromDate > this.toDate) {
+                this.toDate = null;
+            }
         }
     },
 
@@ -143,8 +139,8 @@ Polymer({
     _buildSearchRequest: function() {
         return {
             location: this.location,
-            startDate: this.startDate,
-            endDate: this.endDate
+            fromDate: this.fromDate,
+            toDate: this.toDate
         };
     },
 

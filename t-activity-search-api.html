@@ -123,71 +123,34 @@
 
         _buildData: function(data) {
             var query = {
-                "productType": "Flight",
-                "Passengers": [
-                    {
-                        "quantity": data.adult,
-                        "type": "Adult",
-                        "ages": []
-                    },
-                    {
-                        "quantity": data.child,
-                        "type": "Child",
-                        "ages": []
-                    },
-                    {
-                        "quantity": 0,
-                        "type": "Senior",
-                        "ages": []
-                    },
-                    {
-                        "quantity": data.infant,
-                        "type": "Infant",
-                        "ages": []
-                    }
-                ],
-                "legs": [
-                    {
-                        "departureLocation": data.departureAirport,
-                        "includeNearByAirportsForDeparture": false,
-                        "arrivalLocation": data.arrivalAirport,
-                        "includeNearByAirportsForArrival": false,
-                        "travelDate": {
-                            "date":  this._getFormattedDate(data.departureDate)
-                        }
-                    }
-                ],
-                "preferences": { "nonStopOnly": false, "cabinType": data.cabinType }
+                "location":{
+                    "name": data.location.name,
+                    "geoCode": data.location.geoCode,
+                    "type": data.location.type,
+                    "code": data.location.code,
+                    "cityName": data.location.cityName,
+                    "countryCode": data.location.countryCode,
+                    "stateCode": data.location.stateCode,
+                    "formattedAddress": data.location.formattedAddress
+                },
+                "fromDate": {
+                    "date": this._getFormattedDate(data.fromDate),
+                    "time": "12:00 AM"
+                },
+                "toDate": {
+                    "date": this._getFormattedDate(data.toDate),
+                    "time": "12:00 AM"
+                },
+                "type": "Activity"
             };
-            if (data.itineraryType === 'RoundTrip') {
-                query.legs[1] = {
-                    "departureLocation": data.arrivalAirport,
-                    "includeNearByAirportsForDeparture": false,
-                    "arrivalLocation": data.departureAirport,
-                    "includeNearByAirportsForArrival": false,
-                    "travelDate": {
-                        "date":  this._getFormattedDate(data.arrivalDate)
-                    }
-
-                };
-            }
             return query;
         },
-     /*
+        /*
          * <p>Translates dates to make them compatible with t-calendar</p>
         */
         _getFormattedDate: function (dateString) {
             dateString = new Date(dateString);
-
-            var date = dateString.getDate();
-            date = date <= 9 ? '0' + date : date;
-
-            var month = dateString.getMonth() + 1;
-            month = month <= 9 ? '0' + month : month;
-
-            var year = dateString.getFullYear();
-
-            return month +'/'+ date +'/'+ year;
+            return dateString;
         },
         /*
          * <p>Success callback</p>
