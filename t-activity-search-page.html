@@ -2,9 +2,10 @@
 <link rel="import" href="../t-sessionstorage/t-sessionstorage.html">
 <link rel="import" href="../t-notify/t-notify.html">
 <link rel="import" href="../t-shared-lib/t-search-page-behaviour.html">
+<link rel="import" href="../t-shared-lib/t-search-api.html">
 
 <link rel="import" href="t-activity-search.html">
-<link rel="import" href="t-activity-search-api.html">
+<link rel="import" href="t-activity-search-api-decorator.html">
 
 <!--
     <h3>Details:</h3>
@@ -92,18 +93,22 @@
             id="searchView"
             autosuggest-api="{{apiBaseUrl}}api/content/autosuggest/"
             auth-token="{{authToken}}"
-            on-t-activity-search="onSearch">
+            on-t-activity-search-validate="onSearch">
         </t-activity-search>
 
-        <t-activity-search-api 
+        <t-activity-search-api-decorator
+            input="[[searchedData]]"
+            output="{{searchRequest}}">
+        </t-activity-search-api-decorator>
+        <t-search-api 
             id="searchApi" 
-            loading={{loading}} 
+            data="[[searchRequest]]" 
             api-base-url="{{apiBaseUrl}}" 
             api-relative-url="api/Activity/search" 
             auth-token="{{authToken}}"
-            on-t-activity-search-api-success="onSearchSuccess"
-            on-t-activity-search-api-error="onSearchError">
-        </t-activity-search-api>
+            on-t-search-api-success="onSearchSuccess"
+            on-t-search-api-error="onSearchError">
+        </t-search-api>
 
         <t-sessionstorage
             id="sessionStore"
