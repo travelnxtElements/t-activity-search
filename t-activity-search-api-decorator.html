@@ -96,8 +96,7 @@
 
             //the data object to bind to populate data
             input: {
-                type: Object,
-                value: null
+                type: Object
             },
 
             /**
@@ -111,10 +110,6 @@
         },
 
         _buildData: function(data) {
-            console.log(data);
-            if(!data){
-                return;
-            }
             var query = {
                 "location":{
                     "name": data.location.name,
