@@ -1,7 +1,7 @@
 {
-  "name": "t-activity-seach",
+  "name": "t-activity-search",
   "description": "this element is used for the activity search page",
-  "main": "t-activity-seach.html",
+  "main": "t-activity-search.html",
   "authors": [
     "Rahul Pilkhwal <rahul.pilkhwal@tavisca.com>",
     "Shailesh Kumar Srivastava <ssrivastava@tavisca.com>",
