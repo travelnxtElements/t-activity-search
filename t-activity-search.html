@@ -28,7 +28,7 @@ necessary for searching
         </style>
             <div class="form flex">
                 <div class="row">
-                    <t-autosuggest id="location" name="location" required selected-item="{{location}}" query-params="token={{authToken}}" label="Origin" token-param="formattedAddress" data-url="{{autosuggestApi}}" error-message="You missed this."></t-autosuggest>
+                    <t-autosuggest id="location" name="location" required selected-item="{{location}}" query-params="token={{authToken}}" label="Search city, address, zip or landmark" token-param="formattedAddress" data-url="{{autosuggestApi}}" error-message="You missed this."></t-autosuggest>
                 </div>
                 <div class="row layout horizontal">
                     <t-calendar class="flex horizontal-margin-right" id="fromDate" required selected-date="{{fromDate}}" label="From Date" name="fromDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
