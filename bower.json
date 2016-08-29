@@ -1,6 +1,6 @@
 {
   "name": "t-activity-search",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "this element is used for the activity search page",
   "main": "t-activity-search.html",
   "authors": [
